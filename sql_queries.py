@@ -140,7 +140,7 @@ staging_songs_copy = (f"""
 songplay_table_insert = ("""
     INSERT INTO songplays (start_time, user_id, level, song_id, artist_id,
         session_id, location, user_agent)
-    SELECT se.ts,
+    SELECT DISTINCT se.ts,
            se.user_id,
            se.level,
            ss.song_id,
@@ -156,25 +156,25 @@ songplay_table_insert = ("""
 
 user_table_insert = ("""
     INSERT INTO users (user_id, first_name, last_name, gender, level)
-    SELECT user_id, first_name, last_name, gender, level
-    FROM staging_events where user_id is NOT NULL;
+    SELECT DISTINCT user_id, first_name, last_name, gender, level
+    FROM staging_events se where se.page='NextSong' user_id is NOT NULL;
 """)
 
 song_table_insert = ("""
     INSERT INTO songs(song_id, title, artist_id, year, duration)
-    SELECT song_id, title, artist_id, year, duration
+    SELECT DISTINCT song_id, title, artist_id, year, duration
     FROM staging_songs;
 """)
 
 artist_table_insert = ("""
     INSERT INTO artists(artist_id, name, location, latitude, longitude)
-    SELECT artist_id, artist_name, artist_location, artist_latitude, artist_longitude
+    SELECT DISTINCT artist_id, artist_name, artist_location, artist_latitude, artist_longitude
     FROM staging_songs;
 """)
 
 time_table_insert = ("""
     INSERT INTO time(start_time, hour, day, week, month, year, weekday)
-    SELECT start_time,
+    SELECT DISTINCT start_time,
         EXTRACT(hour from start_time),
         EXTRACT(day from start_time),
         EXTRACT(week from start_time),
