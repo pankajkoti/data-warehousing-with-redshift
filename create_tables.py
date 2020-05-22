@@ -4,10 +4,7 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
-
-
-
-"""
+    """
     Queries to clean the database by dropping if tables exists
     :param cur: cursor object to execute queries
     :param conn: pyscopg2 connection object to Redshift cluster
