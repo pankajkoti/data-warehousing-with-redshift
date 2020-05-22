@@ -157,7 +157,7 @@ songplay_table_insert = ("""
 user_table_insert = ("""
     INSERT INTO users (user_id, first_name, last_name, gender, level)
     SELECT DISTINCT user_id, first_name, last_name, gender, level
-    FROM staging_events se where se.page='NextSong' user_id is NOT NULL;
+    FROM staging_events se where se.page='NextSong' AND user_id is NOT NULL;
 """)
 
 song_table_insert = ("""
